@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
@@ -6,8 +6,9 @@ import { makeStyles, ThemeProvider   } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import ImageIcon from '@material-ui/icons/Image';
-import SendIcon from '@material-ui/icons/Send';
 import { CardContent, List, ListItem, Typography, ListItemText, Divider, Avatar, ListItemAvatar } from '@material-ui/core';
+import { io } from 'socket.io-client';
+
 
 const useStyles = makeStyles({
     cardStyle: {
@@ -27,6 +28,23 @@ const useStyles = makeStyles({
 
 function ChatRoom() {
 
+    const socket = io(process.env.REACT_APP_API_URL);
+    const [message, setMessage] = useState('')
+    const [chat, setChat] = useState([])
+
+    useEffect(() => {
+        socket.on('chat', (payload) => {
+            console.log(payload);
+            setChat(chat.concat(payload))
+        })
+    },[socket])
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        socket.emit('chat', message);
+        setMessage('');
+    }
+
     const classes = useStyles();
 
     return (
@@ -37,7 +55,7 @@ function ChatRoom() {
                         <CardContent>
                             <Typography className={classes.headerText}>ChatRoom</Typography>
 
-                            <List clasName={classes.ListStyle}>
+                            <List className={classes.ListStyle}>
                                 <ListItem>
                                     <ListItemAvatar>
                                        <Avatar>
@@ -66,10 +84,10 @@ function ChatRoom() {
                                 </ListItem>
                             </List>
 
-                            <form action="">
+                            <form onSubmit={onSubmit}>
                                 <Grid container>
                                     <Grid item xs={10}>
-                                        <TextField variant="standard" label="Message" fullWidth size="medium"></TextField>
+                                        <TextField onChange={e => setMessage(e.target.value)} name="message" value={message} variant="standard" label="Message" fullWidth size="medium"></TextField>
                                     </Grid>
                                     <Grid item xs={2}>
                                         <Button type="submit" className={classes.ButtonStyle} variant="contained" color="primary"> Send</Button>

@@ -1,8 +1,10 @@
 import ChatRoom from "./components/ChatRoom";
+import Home from "./components/Home";
 
 function App() {
   return (
-    <ChatRoom/>
+    <Home/>
+    // <ChatRoom/>
   );
 }
 
