@@ -46,11 +46,9 @@ function Home({ socket }) {
     const [roomname, setroomname] = useState('');
     
 
-    const joinRoomBtn = e => {
-        e.preventDefault();
-
+    const joinRoomBtn = () => {
         if(roomname != '' && username != ''){
-            socket.emit('join_room', { username, roomname })
+            socket.emit('join_room', { username: username.toLowerCase(), roomname })
         }else{
             alert('username and roomname is required');
         }
@@ -78,7 +76,7 @@ function Home({ socket }) {
                                         <MenuItem value="JavaScript">JavaScript</MenuItem>
                                         <MenuItem value="React">React</MenuItem>
                                         <MenuItem value="TypeScript">TypeScript</MenuItem>
-                                        <MenuItem value="React-TypeScript">React TypeScript</MenuItem>
+                                        <MenuItem value="React-Typescript">React TypeScript</MenuItem>
                                         <MenuItem value="React-Redux">React Redux</MenuItem>
                                     </Select>
                                 </FormControl>
