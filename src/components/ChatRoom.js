@@ -4,17 +4,20 @@ import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import { makeStyles, ThemeProvider   } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
-import Grid from '@material-ui/core/Grid';
-import { CardContent, List, ListItem, Typography, ListItemText, Divider, Avatar, ListItemAvatar, Box} from '@material-ui/core';
+import { CardContent, Typography, Box} from '@material-ui/core';
 import Message from './Message';
 import SendIcon from '@material-ui/icons/Send';
+import ChatIcon from '@material-ui/icons/Chat';
 
 const useStyles = makeStyles({
+    root: {
+        background: '#fdf0d5'
+    },
     cardStyle: { 
-        position: 'absolute',
         bottom: '0',
-        marginTop: '90px',
-        maxHeight: '90vh',
+        height: '75vh',
+        marginTop: '0px',
+        maxHeight: '75vh',
         marginBottom: '20px',
         marginLeft: '-5px',
         marginRight: '10px',
@@ -25,18 +28,45 @@ const useStyles = makeStyles({
         backgroundImage: '-o-linear-gradient(left, #9f78ff, #32cafe)',
         backgroundImage: 'linear-gradient(to right, #9f78ff, #32cafe)',
         backgroundRepeat: 'repeat-x',
+
     },
-    headerText: {
-        marginBottom: '20px'
+    roomName: {
+        fontSize: '1.2rem',
+        fontWeight: 'bold',
+        zIndex: '99999',
+        margin: '10px 0',
+        color: '#4682B4'
+    },
+    chatIcon:{
+        marginBottom: '-8px'
     },
     ButtonStyle: {
         marginLeft: '10px',
         height: '55px',
-        // width: '80px'
+        backgroundImage: '-webkit-gradient(linear, right top, left top, from(#9f78ff), to(#32cafe))',
+        backgroundImage: '-webkit-linear-gradient(left, #9f78ff, #32cafe)',
+        backgroundImage: '-moz-linear-gradient(left, #9f78ff, #32cafe)',
+        backgroundImage: '-o-linear-gradient(left, #9f78ff, #32cafe)',
+        backgroundImage: 'linear-gradient(to right, #9f78ff, #32cafe)',
+        backgroundRepeat: 'repeat-x',
     },
     box: {
-        marginTop: '20px'
-    }
+        top: '0px',
+        marginLeft: '-5px',
+        marginRight: '10px',
+        marginBottom: '10px'
+    },
+    input: {
+        color: 'black'
+    },
+    cardContent:{
+        '@media (min-width: 780px)' : {
+            minWidth: '500px'
+        },
+        '@media (min-width: 480px)' : {
+            minWidth: '400px'
+        }
+    },
 })
 
 function ChatRoom({ username, roomname, socket }) {
@@ -55,18 +85,22 @@ function ChatRoom({ username, roomname, socket }) {
     const classes = useStyles();
 
     return (
-        <Container maxWidth="sm">
-            <Card className={classes.cardStyle}>
-                <CardContent>
-                    <Typography className={classes.headerText}>Room: {roomname}</Typography>
-                    <Message messages={messages} username={username} socket={socket}/>
-                    <Box className={classes.box} display="flex" justifyContent="start" alignItems="center"> 
-                        <TextField onChange={e => setText(e.target.value)} name="text" value={text} variant="outlined" label="Message" fullWidth size="medium"></TextField>
-                        <Button type="submit" className={classes.ButtonStyle} variant="contained" color="primary" size="medium"> <SendIcon/> </Button>
-                    </Box>
-                </CardContent>
-            </Card>
-        </Container>
+        <>
+            <Container maxWidth="sm">
+                <Typography className={classes.roomName}><ChatIcon className={classes.chatIcon}/> {roomname}</Typography>
+                <Card className={classes.cardStyle}>
+                    <CardContent className={classes.cardContent}>
+                        <Message messages={messages} username={username} socket={socket}/>
+                    </CardContent>
+                </Card>
+            </Container>
+            <Container maxWidth="sm">
+                <Box className={classes.box} display="flex" justifyContent="start" alignItems="center"> 
+                    <TextField InputProps={{ className: classes.input}} onChange={e => setText(e.target.value)} name="text" value={text} variant="outlined" label="Message" fullWidth size="medium"></TextField>
+                    <Button type="submit" className={classes.ButtonStyle} variant="contained" color="primary" size="medium"> <SendIcon/> </Button>
+                </Box>
+            </Container>
+        </>
     )
 }
 

@@ -6,6 +6,9 @@ import { deepOrange, deepPurple } from '@material-ui/core/colors';
 
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        height: '90vh'        
+    },
     orange: {
       color: 'white',
       backgroundColor: deepOrange[500],
@@ -58,7 +61,7 @@ function Message({ messages, username }){
 
     
     return ( 
-       <>
+       <div>
             {
                 messages && messages.map((m) => {
                     if(m.username === username){
@@ -127,7 +130,7 @@ function Message({ messages, username }){
                 })
             }
              <div ref={messagesEndRef} />
-       </>
+       </div>
     );
 }
 
