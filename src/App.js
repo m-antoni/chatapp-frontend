@@ -20,6 +20,8 @@ function App() {
 
 
 function Main(props){
+  console.log(props)
+
   return (
     <ChatRoom 
       username={props.match.params.username} 

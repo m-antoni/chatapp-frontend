@@ -6,9 +6,6 @@ import { deepOrange, deepPurple } from '@material-ui/core/colors';
 
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        height: '90vh'        
-    },
     orange: {
       color: 'white',
       backgroundColor: deepOrange[500],
@@ -19,7 +16,8 @@ const useStyles = makeStyles((theme) => ({
       marginRight: '6px'   
     },
     messageRight: {
-        width: '75%',
+        float: 'right',
+        maxWidth: '75%',
         display: 'flex',
         justifyContent: 'flex-start',
         marginLeft: 'auto',
@@ -30,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
         margin: '10px 0px'
     },
     messageLeft: {
-        width: '75%',
+        float: 'left',
+        maxWidth: '75%',
         display: 'flex',
         justifyContent: 'flex-start',
         marginRight: 'auto',
@@ -38,16 +37,23 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#A8DDFD',
         padding: '10px',
         borderRadius: '20px 20px 20px 0px',
-        margin: '10px 0px'
+        margin: '10px 0px',
+        clear: 'both',
+        overflowWrap: 'anywhere'
     },
+    clearBoth:{
+        clear: 'both'
+    },
+    dateStyle:{
+        color: 'grey',
+        margin: '3px 6px',
+        fontSize: '0.7rem'
+    }
 }));
 
 
 
-
 function Message({ messages, username }){
-
-    console.log(messages, username)
     
     const classes = useStyles();
 
@@ -59,6 +65,7 @@ function Message({ messages, username }){
 
     useEffect(scrollToBottom, [messages]);
 
+    console.log(messages);
     
     return ( 
        <div>
@@ -66,64 +73,30 @@ function Message({ messages, username }){
                 messages && messages.map((m) => {
                     if(m.username === username){
                         return (
-                            <Avatar className={classes.purple}>M</Avatar>
+                           <>
+                                <div className={classes.clearBoth}></div>
+                                <div className={classes.messageRight}>
+                                    <div>
+                                        <div>{m.text}</div>
+                                        <div className={classes.dateStyle}>{m.date}</div>
+                                    </div>
+                                    <Avatar className={classes.orange}>M</Avatar>
+                                </div>
+                                <div className={classes.clearBoth}></div>
+                            </>
                         )
                     }else{
                         return (
                             <>
-                            <div className={classes.messageLeft}>
-                                <Avatar className={classes.purple}>M</Avatar>
-                                <div>
-                                    <div>Lorem Ipsum akjsdkalsj kasjdklasjdkl ajlkdja asdasd asdasd adasklsjd</div>
+                                <div className={classes.clearBoth}></div>
+                                <div className={classes.messageLeft}>
+                                    <Avatar className={classes.purple}>M</Avatar>
+                                    <div>
+                                        <div>{m.text}</div>
+                                        <div className={classes.dateStyle}>{m.date}</div>
+                                    </div>
                                 </div>
-                            </div>
-                 
-                            <div className={classes.messageRight}>
-                                <div>
-                                    <div>Lorem Ipsum akjsdkalsj kasjdklasjdkl ajlkdja asdasd asdasd adasklsjd</div>
-                                </div>
-                                <Avatar className={classes.orange}>M</Avatar>
-                            </div>
-                            <div className={classes.messageLeft}>
-                                <Avatar className={classes.purple}>M</Avatar>
-                                <div>
-                                    <div>Lorem Ipsum akjsdkalsj kasjdklasjdkl ajlkdja asdasd asdasd adasklsjd</div>
-                                </div>
-                            </div>
-                 
-                            <div className={classes.messageRight}>
-                                <div>
-                                    <div>Lorem Ipsum akjsdkalsj kasjdklasjdkl ajlkdja asdasd asdasd adasklsjd</div>
-                                </div>
-                                <Avatar className={classes.orange}>M</Avatar>
-                            </div>
-         
-                            <div className={classes.messageLeft}>
-                                <Avatar className={classes.purple}>M</Avatar>
-                                <div>
-                                    <div>Lorem Ipsum akjsdkalsj kasjdklasjdkl ajlkdja asdasd asdasd adasklsjd</div>
-                                </div>
-                            </div>
-                 
-                            <div className={classes.messageRight}>
-                                <div>
-                                    <div>Lorem Ipsum akjsdkalsj kasjdklasjdkl ajlkdja asdasd asdasd adasklsjd</div>
-                                </div>
-                                <Avatar className={classes.orange}>M</Avatar>
-                            </div>
-                            <div className={classes.messageLeft}>
-                                <Avatar className={classes.purple}>M</Avatar>
-                                <div>
-                                    <div>Lorem Ipsum akjsdkalsj kasjdklasjdkl ajlkdja asdasd asdasd adasklsjd</div>
-                                </div>
-                            </div>
-                 
-                            <div className={classes.messageRight}>
-                                <div>
-                                    <div>Lorem Ipsum akjsdkalsj kasjdklasjdkl ajlkdja asdasd asdasd adasklsjd</div>
-                                </div>
-                                <Avatar className={classes.orange}>M</Avatar>
-                            </div>
+                                <div className={classes.clearBoth}></div>
                             </>
                         )
                     }

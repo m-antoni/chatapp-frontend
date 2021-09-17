@@ -84,6 +84,14 @@ function ChatRoom({ username, roomname, socket }) {
 
     const classes = useStyles();
 
+
+    const onSubmit = () => {
+        if(text !== ""){
+            socket.emit("chat", text);
+            setText('')
+        }
+    }
+
     return (
         <>
             <Container maxWidth="sm">
@@ -96,8 +104,18 @@ function ChatRoom({ username, roomname, socket }) {
             </Container>
             <Container maxWidth="sm">
                 <Box className={classes.box} display="flex" justifyContent="start" alignItems="center"> 
-                    <TextField InputProps={{ className: classes.input}} onChange={e => setText(e.target.value)} name="text" value={text} variant="outlined" label="Message" fullWidth size="medium"></TextField>
-                    <Button type="submit" className={classes.ButtonStyle} variant="contained" color="primary" size="medium"> <SendIcon/> </Button>
+                    <TextField 
+                        InputProps={{ className: classes.input}} 
+                        onChange={e => setText(e.target.value)} 
+                        onKeyPress={(e) => { if(e.key === 'Enter') return onSubmit() }}
+                        name="text" 
+                        value={text} 
+                        variant="outlined" 
+                        label="Message" 
+                        fullWidth
+                        size="medium"
+                    > </TextField>
+                    <Button type="submit" onClick={onSubmit} className={classes.ButtonStyle} variant="contained" color="primary" size="medium"> <SendIcon/> </Button>
                 </Box>
             </Container>
         </>
