@@ -1,9 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { makeStyles, ThemeProvider   } from '@material-ui/styles';
 import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography'
 import { deepOrange, deepPurple } from '@material-ui/core/colors';
-
 
 const useStyles = makeStyles((theme) => ({
     orange: {
@@ -25,7 +23,10 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#f8e896',
         padding: '10px',
         borderRadius: '20px 20px 0px 20px',
-        margin: '10px 0px'
+        margin: '5px 0px'
+    },
+    text:{
+        margin: '0px 5px'
     },
     messageLeft: {
         float: 'left',
@@ -37,20 +38,18 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#A8DDFD',
         padding: '10px',
         borderRadius: '20px 20px 20px 0px',
-        margin: '10px 0px',
-        clear: 'both',
-        overflowWrap: 'anywhere'
+        margin: '5px 0px',
     },
     clearBoth:{
         clear: 'both'
     },
-    dateStyle:{
-        color: 'grey',
-        margin: '3px 6px',
-        fontSize: '0.7rem'
+    date:{
+        color: '#000033',
+        margin: '3px',
+        fontSize: '0.7rem',
+        fontWeight: '600'
     }
 }));
-
 
 
 function Message({ messages, username }){
@@ -64,40 +63,38 @@ function Message({ messages, username }){
     };
 
     useEffect(scrollToBottom, [messages]);
-
-    console.log(messages);
     
     return ( 
        <div>
             {
-                messages && messages.map((m) => {
+                messages && messages.map((m,i) => {
                     if(m.username === username){
                         return (
-                           <>
+                           <div key={i}>
                                 <div className={classes.clearBoth}></div>
                                 <div className={classes.messageRight}>
-                                    <div>
+                                    <div className={classes.text}>
                                         <div>{m.text}</div>
-                                        <div className={classes.dateStyle}>{m.date}</div>
+                                        <div className={classes.date}>{m.date}</div>
                                     </div>
-                                    <Avatar className={classes.orange}>M</Avatar>
+                                    <Avatar className={classes.orange}>{m.username.charAt(0).toUpperCase()}</Avatar>
                                 </div>
                                 <div className={classes.clearBoth}></div>
-                            </>
+                            </div>
                         )
                     }else{
                         return (
-                            <>
+                            <div key={i}>
                                 <div className={classes.clearBoth}></div>
                                 <div className={classes.messageLeft}>
-                                    <Avatar className={classes.purple}>M</Avatar>
-                                    <div>
+                                    <Avatar className={classes.purple}>{m.username.charAt(0).toUpperCase()}</Avatar>
+                                    <div className={classes.text}>
                                         <div>{m.text}</div>
-                                        <div className={classes.dateStyle}>{m.date}</div>
+                                        <div className={classes.date}>{m.date}</div>
                                     </div>
                                 </div>
                                 <div className={classes.clearBoth}></div>
-                            </>
+                            </div>
                         )
                     }
                 })

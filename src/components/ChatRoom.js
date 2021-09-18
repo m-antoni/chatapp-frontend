@@ -8,16 +8,17 @@ import { CardContent, Typography, Box} from '@material-ui/core';
 import Message from './Message';
 import SendIcon from '@material-ui/icons/Send';
 import ChatIcon from '@material-ui/icons/Chat';
+import { Link }from 'react-router-dom';
 
 const useStyles = makeStyles({
     root: {
         background: '#fdf0d5'
     },
-    cardStyle: { 
+    card: { 
         bottom: '0',
-        height: '75vh',
+        height: '73vh',
         marginTop: '0px',
-        maxHeight: '75vh',
+        maxHeight: '73vh',
         marginBottom: '20px',
         marginLeft: '-5px',
         marginRight: '10px',
@@ -40,7 +41,7 @@ const useStyles = makeStyles({
     chatIcon:{
         marginBottom: '-8px'
     },
-    ButtonStyle: {
+    button: {
         marginLeft: '10px',
         height: '55px',
         backgroundImage: '-webkit-gradient(linear, right top, left top, from(#9f78ff), to(#32cafe))',
@@ -54,7 +55,7 @@ const useStyles = makeStyles({
         top: '0px',
         marginLeft: '-5px',
         marginRight: '10px',
-        marginBottom: '10px'
+        // marginBottom: '10px'
     },
     input: {
         color: 'black'
@@ -67,12 +68,32 @@ const useStyles = makeStyles({
             minWidth: '400px'
         }
     },
+    header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginTop: '10px'
+    },
+    leave: {
+        height: '40px',
+        marginRight: '10px'
+    },
+    link: {
+        textDecoration: 'none'
+    }
 })
 
 function ChatRoom({ username, roomname, socket }) {
 
+    const classes = useStyles();
     const [text, setText] = useState('')
     const [messages, setMessages] = useState([])
+
+    // useEffect(() => {
+    //     socket.on('message', (payload) => {
+    //         setMessages([...messages, payload]);
+    //         console.log('run')
+    //     });
+    // })
 
     useEffect(() => {
         socket.on('message', (payload) => {
@@ -82,7 +103,10 @@ function ChatRoom({ username, roomname, socket }) {
         })
     },[socket])
 
-    const classes = useStyles();
+    useEffect(() => {  
+        document.body.classList.remove('login-bg')
+        document.body.classList.add('default-bg')
+    },[]);
 
 
     const onSubmit = () => {
@@ -95,8 +119,11 @@ function ChatRoom({ username, roomname, socket }) {
     return (
         <>
             <Container maxWidth="sm">
-                <Typography className={classes.roomName}><ChatIcon className={classes.chatIcon}/> {roomname}</Typography>
-                <Card className={classes.cardStyle}>
+                <div className={classes.header}>
+                    <Typography className={classes.roomName}><ChatIcon className={classes.chatIcon}/> {roomname}</Typography> 
+                    <Link onClick={() => window.location.href = '/'} className={classes.link}><Button className={classes.leave} variant="contained" color="secondary" size="small"> Leave Room </Button> </Link>
+                </div>
+                <Card className={classes.card}>
                     <CardContent className={classes.cardContent}>
                         <Message messages={messages} username={username} socket={socket}/>
                     </CardContent>
@@ -115,7 +142,7 @@ function ChatRoom({ username, roomname, socket }) {
                         fullWidth
                         size="medium"
                     > </TextField>
-                    <Button type="submit" onClick={onSubmit} className={classes.ButtonStyle} variant="contained" color="primary" size="medium"> <SendIcon/> </Button>
+                    <Button type="submit" onClick={onSubmit} className={classes.button} variant="contained" color="primary" size="medium"> <SendIcon/> </Button>
                 </Box>
             </Container>
         </>

@@ -1,11 +1,12 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import './App.css';
 import ChatRoom from "./components/ChatRoom";
 import Home from "./components/Home";
 import io from "socket.io-client";
 
 const socket = io(process.env.REACT_APP_API_URL);
 
-function App() {
+function App(){
     return (
         <Router>
           <Switch>
@@ -20,8 +21,6 @@ function App() {
 
 
 function Main(props){
-  console.log(props)
-
   return (
     <ChatRoom 
       username={props.match.params.username} 
@@ -30,7 +29,5 @@ function Main(props){
     />
   )
 }
-
-
 
 export default App;
