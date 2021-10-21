@@ -8,7 +8,7 @@ import { CardContent, Typography, Box} from '@material-ui/core';
 import Message from './Message';
 import SendIcon from '@material-ui/icons/Send';
 import ChatIcon from '@material-ui/icons/Chat';
-import { Link }from 'react-router-dom';
+import { Link, useParams }from 'react-router-dom';
 
 const useStyles = makeStyles({
     root: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles({
         fontWeight: 'bold',
         zIndex: '99999',
         margin: '10px 0',
-        color: '#4682B4'
+        color: '#52b69a'
     },
     chatIcon:{
         marginBottom: '-8px'
@@ -82,18 +82,13 @@ const useStyles = makeStyles({
     }
 })
 
-function ChatRoom({ username, roomname, socket }) {
+function ChatRoom({ socket }) {
+
+    const { username, roomname } = useParams();
 
     const classes = useStyles();
     const [text, setText] = useState('')
     const [messages, setMessages] = useState([])
-
-    // useEffect(() => {
-    //     socket.on('message', (payload) => {
-    //         setMessages([...messages, payload]);
-    //         console.log('run')
-    //     });
-    // })
 
     useEffect(() => {
         socket.on('message', (payload) => {
@@ -101,11 +96,14 @@ function ChatRoom({ username, roomname, socket }) {
             temp.push(payload)
             setMessages([...temp]);
         })
+        //eslint-disable-next-line
+
     },[socket])
 
     useEffect(() => {  
         document.body.classList.remove('login-bg')
         document.body.classList.add('default-bg')
+        //eslint-disable-next-line
     },[]);
 
 
@@ -120,7 +118,7 @@ function ChatRoom({ username, roomname, socket }) {
         <>
             <Container maxWidth="sm">
                 <div className={classes.header}>
-                    <Typography className={classes.roomName}><ChatIcon className={classes.chatIcon}/> {roomname}</Typography> 
+                    <Typography className={classes.roomName}><ChatIcon className={classes.chatIcon}/> {roomname.toUpperCase()}</Typography> 
                     <Link onClick={() => window.location.href = '/'} className={classes.link}><Button className={classes.leave} variant="contained" color="secondary" size="small"> Leave Room </Button> </Link>
                 </div>
                 <Card className={classes.card}>

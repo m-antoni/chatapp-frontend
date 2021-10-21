@@ -10,24 +10,21 @@ function App(){
     return (
         <Router>
           <Switch>
-              <Route path="/" exact>
-                  <Home socket={socket}/>
-              </Route>  
-              <Route path="/chat/:roomname/:username" component={Main}/>
+              <Route 
+                path="/"
+                render={() => <Home socket={socket}/>}
+                exact 
+              />
+              <Route 
+                path="/:roomname/:username" 
+                socket={socket} 
+                render={() => <ChatRoom socket={socket}/>}
+                exact
+              />
           </Switch>
         </Router>
     );
 }
 
-
-function Main(props){
-  return (
-    <ChatRoom 
-      username={props.match.params.username} 
-      roomname={props.match.params.roomname} 
-      socket={socket}
-    />
-  )
-}
 
 export default App;

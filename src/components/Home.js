@@ -49,16 +49,19 @@ const useStyles = makeStyles((theme) => ({
 
 function Home({ socket }) {
 
+    console.log(socket)
+
     const classes = useStyles();
     const [username, setusername] = useState('');
     const [roomname, setroomname] = useState('');
     const [loading, setLoading] = useState(false);
     const [redirect, setRedirect] = useState(false);
 
-    
+
     useEffect(() => {  
         document.body.classList.add('login-bg')
         document.body.classList.remove('default-bg')
+        //eslint-disable-next-line
     },[]);
 
     const joinRoom = (e) => {
@@ -66,6 +69,7 @@ function Home({ socket }) {
 
         setLoading(true);
         if(roomname != '' && username != ''){
+            console.log("EMIT", socket)
             socket.emit('join_room', { username: username.toLowerCase(), roomname })
             setRedirect(true)
         }else{
@@ -75,7 +79,7 @@ function Home({ socket }) {
     } 
 
     if(redirect){
-        return <Redirect to={`/chat/${roomname}/${username}`}/>
+        return <Redirect to={`/${roomname}/${username}`}/>
     }
 
     return (
@@ -94,11 +98,11 @@ function Home({ socket }) {
                                     <InputLabel>Select Room</InputLabel>
                                     <Select name="room" value={roomname} onChange={e => setroomname(e.target.value)}>
                                         <MenuItem value="">None</MenuItem>
-                                        <MenuItem value="JavaScript">JavaScript</MenuItem>
-                                        <MenuItem value="React">React</MenuItem>
-                                        <MenuItem value="TypeScript">TypeScript</MenuItem>
-                                        <MenuItem value="React-Typescript">React TypeScript</MenuItem>
-                                        <MenuItem value="React-Redux">React Redux</MenuItem>
+                                        <MenuItem value="javaScript">JavaScript</MenuItem>
+                                        <MenuItem value="react">React</MenuItem>
+                                        <MenuItem value="typescript">TypeScript</MenuItem>
+                                        <MenuItem value="mongodb">MongoDB</MenuItem>
+                                        <MenuItem value="node-express">Nodejs</MenuItem>
                                     </Select>
                                 </FormControl>
                             </div>
