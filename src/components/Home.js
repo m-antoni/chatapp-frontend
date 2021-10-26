@@ -10,6 +10,8 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import { Button, CardContent, CircularProgress, FormGroup } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
+import axios from 'axios'
+import { ToastDanger } from '../helpers/izitoast.helper';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -57,25 +59,37 @@ function Home({ socket }) {
     const [loading, setLoading] = useState(false);
     const [redirect, setRedirect] = useState(false);
 
-
     useEffect(() => {  
         document.body.classList.add('login-bg')
         document.body.classList.remove('default-bg')
         //eslint-disable-next-line
     },[]);
 
-    const joinRoom = (e) => {
+    const joinRoom = async (e) => {
         e.preventDefault();
-
         setLoading(true);
-        if(roomname != '' && username != ''){
-            console.log("EMIT", socket)
-            socket.emit('join_room', { username: username.toLowerCase(), roomname })
-            setRedirect(true)
-        }else{
-            alert('username and roomname is required');
+
+        if(roomname == '' && username == ''){
+            ToastDanger('Username and Roomname is required');
             setLoading(false);
+            return false;
         }
+
+        try{
+
+            const login = await axios.post(`${process.env.REACT_APP_API_URL}/api/login`, {
+                socket_id: socket.id,
+                username,
+                roomname,
+            });
+
+            // socket.emit('joinRoom', { username: username.toLowerCase(), roomname })
+            // setRedirect(true)
+        }catch(err){
+            console.log(err)
+            ToastDanger(err.response.data.message)
+            setLoading(false);
+        }            
     } 
 
     if(redirect){

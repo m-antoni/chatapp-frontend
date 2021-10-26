@@ -8,7 +8,7 @@ import { CardContent, Typography, Box} from '@material-ui/core';
 import Message from './Message';
 import SendIcon from '@material-ui/icons/Send';
 import ChatIcon from '@material-ui/icons/Chat';
-import { Link, useParams }from 'react-router-dom';
+import { Link, useParams, Redirect }from 'react-router-dom';
 
 const useStyles = makeStyles({
     root: {
@@ -97,7 +97,6 @@ function ChatRoom({ socket }) {
             setMessages([...temp]);
         })
         //eslint-disable-next-line
-
     },[socket])
 
     useEffect(() => {  
@@ -114,12 +113,18 @@ function ChatRoom({ socket }) {
         }
     }
 
+    const leaveRoom = () => {
+        socket.emit("leaveRoom", {
+            socket_id: socket.id,
+        });
+    }
+
     return (
         <>
             <Container maxWidth="sm">
                 <div className={classes.header}>
                     <Typography className={classes.roomName}><ChatIcon className={classes.chatIcon}/> {roomname.toUpperCase()}</Typography> 
-                    <Link onClick={() => window.location.href = '/'} className={classes.link}><Button className={classes.leave} variant="contained" color="secondary" size="small"> Leave Room </Button> </Link>
+                    <Link to={'/'} onClick={leaveRoom} className={classes.link}><Button className={classes.leave} variant="contained" color="secondary" size="small"> Leave Room </Button> </Link>
                 </div>
                 <Card className={classes.card}>
                     <CardContent className={classes.cardContent}>
