@@ -11,7 +11,8 @@ import TextField from '@material-ui/core/TextField';
 import { Button, CardContent, CircularProgress, FormGroup } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios'
-import { ToastDanger } from '../helpers/izitoast.helper';
+import { ToastDanger } from '../utils/izitoast.helper';
+import { userLocalStorage } from '../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -83,8 +84,11 @@ function Home({ socket }) {
                 roomname,
             });
 
-            // socket.emit('joinRoom', { username: username.toLowerCase(), roomname })
-            // setRedirect(true)
+            console.log(login)
+
+            socket.emit('joinRoom', { username: username.toLowerCase(), roomname })
+            userLocalStorage('set', login.data.user_data);
+            setRedirect(true)
         }catch(err){
             console.log(err)
             ToastDanger(err.response.data.message)
