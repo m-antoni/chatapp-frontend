@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { makeStyles, ThemeProvider   } from '@material-ui/styles';
 import Avatar from '@material-ui/core/Avatar';
 import { deepOrange, deepPurple } from '@material-ui/core/colors';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
     orange: {
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
         clear: 'both'
     },
     date:{
-        color: '#000033',
+        color: 'grey',
         margin: '3px',
         fontSize: '0.7rem',
         fontWeight: '600'
@@ -64,10 +65,13 @@ function Message({ messages, username }){
 
     useEffect(scrollToBottom, [messages]);
     
+    console.log(messages)
+
     return ( 
        <div>
             {
                 messages && messages.map((m,i) => {
+                    // console.log(m)
                     if(m.username === username){
                         return (
                            <div key={i}>
@@ -75,7 +79,7 @@ function Message({ messages, username }){
                                 <div className={classes.messageRight}>
                                     <div className={classes.text}>
                                         <div>{m.text}</div>
-                                        <div className={classes.date}>{m.date}</div>
+                                        <div className={classes.date}>{moment(m.date).format('ll h:mm A')}</div>
                                     </div>
                                     <Avatar className={classes.orange}>{m.username.charAt(0).toUpperCase()}</Avatar>
                                 </div>
@@ -90,7 +94,7 @@ function Message({ messages, username }){
                                     <Avatar className={classes.purple}>{m.username.charAt(0).toUpperCase()}</Avatar>
                                     <div className={classes.text}>
                                         <div>{m.text}</div>
-                                        <div className={classes.date}>{m.date}</div>
+                                        <div className={classes.date}>{moment(m.date).format('ll h:mm A')}</div>
                                     </div>
                                 </div>
                                 <div className={classes.clearBoth}></div>

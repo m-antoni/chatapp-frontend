@@ -9,6 +9,8 @@ import Message from './Message';
 import SendIcon from '@material-ui/icons/Send';
 import ChatIcon from '@material-ui/icons/Chat';
 import { Link, useParams, Redirect }from 'react-router-dom';
+import { getUserLocalStorage, removeUserLocalStorage, setUserLocalStorage } from '../utils/helpers';
+import axios from 'axios';
 
 const useStyles = makeStyles({
     root: {
@@ -89,12 +91,16 @@ function ChatRoom({ socket }) {
     const classes = useStyles();
     const [text, setText] = useState('')
     const [messages, setMessages] = useState([])
+    const [socket_id, setSocketID] = useState(null)
 
     useEffect(() => {
         socket.on('message', (payload) => {
-            let temp = messages
-            temp.push(payload)
-            setMessages([...temp]);
+            
+            const userData = getUserLocalStorage();
+
+            if(userData.socket_id === payload.socket_id){
+                setMessages(payload.messages);
+            }
         })
         //eslint-disable-next-line
     },[socket])
@@ -103,21 +109,36 @@ function ChatRoom({ socket }) {
         document.body.classList.remove('login-bg')
         document.body.classList.add('default-bg')
         //eslint-disable-next-line
+        getAllMessages()
     },[]);
+
+
+    const getAllMessages = async () => {
+        try {
+            const userData = getUserLocalStorage();
+            const room = await axios.get(`${process.env.REACT_APP_API_URL}/api/${userData.room_id}`)
+            setMessages(room.data.user_data.messages);
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
 
     const onSubmit = () => {
         if(text !== ""){
-            socket.emit("chat", text);
+            const data = getUserLocalStorage();
+            socket.emit("chatMessage", { ...data, text: text });
             setText('')
         }
     }
 
-    const leaveRoom = () => {
-        socket.emit("leaveRoom", {
-            socket_id: socket.id,
-        });
+    const leaveRoom = async () => {
+        const userData = getUserLocalStorage();
+        socket.emit("leaveRoom", userData);
+        removeUserLocalStorage();
     }
+
+    console.log(socket_id, messages)
 
     return (
         <>

@@ -8,17 +8,17 @@ export const  capitalize = (string, a) => {
 }
 
 
-export const userLocalStorage = (type, data = null) => {
-    const LS = localStorage;
-    switch (type) {
-        case 'get':
-            // LS.getItem('chat-ls') || null;
-            break;
-        case 'set':
-            LS.setItem('chat-ls', JSON.stringify(data))
-            break;
-        default:
-            LS.removeItem('chat-ls')
-            break;
-    }
+
+export const getUserLocalStorage = () => {
+    const user = localStorage.getItem('chatapp');
+    if(user) return JSON.parse(user);
+    else return null
+}
+
+export const setUserLocalStorage = (data) => {
+    localStorage.setItem('chatapp', JSON.stringify(data))
+}
+
+export const removeUserLocalStorage = () => {
+    localStorage.removeItem('chatapp');
 }
