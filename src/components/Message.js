@@ -64,8 +64,7 @@ function Message({ messages, username }){
     };
 
     useEffect(scrollToBottom, [messages]);
-    
-    console.log(messages)
+
 
     return ( 
        <div>

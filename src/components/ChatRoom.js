@@ -9,7 +9,7 @@ import Message from './Message';
 import SendIcon from '@material-ui/icons/Send';
 import ChatIcon from '@material-ui/icons/Chat';
 import { Link, useParams, Redirect }from 'react-router-dom';
-import { getUserLocalStorage, removeUserLocalStorage, setUserLocalStorage } from '../utils/helpers';
+import { getUserLocalStorage, removeUserLocalStorage, setUserLocalStorage, updateSocketID } from '../utils/helpers';
 import axios from 'axios';
 
 const useStyles = makeStyles({
@@ -91,38 +91,36 @@ function ChatRoom({ socket }) {
     const classes = useStyles();
     const [text, setText] = useState('')
     const [messages, setMessages] = useState([])
-    const [socket_id, setSocketID] = useState(null)
 
     useEffect(() => {
-        socket.on('message', (payload) => {
-            
-            const userData = getUserLocalStorage();
 
-            if(userData.socket_id === payload.socket_id){
-                setMessages(payload.messages);
+        // receive from server but will filter by room id
+        socket.on('message', async (payload) => {
+            // await updateSocketID(payload.socket_id);
+            const userData = getUserLocalStorage();
+            if(userData){
+                if(userData.room_id === payload.room_id){
+                    setMessages(payload.messages);
+                }
             }
         })
+        
+        console.log(socket)
         //eslint-disable-next-line
     },[socket])
 
     useEffect(() => {  
         document.body.classList.remove('login-bg')
         document.body.classList.add('default-bg')
-        //eslint-disable-next-line
         getAllMessages()
+        //eslint-disable-next-line
     },[]);
 
 
     const getAllMessages = async () => {
-        try {
-            const userData = getUserLocalStorage();
-            const room = await axios.get(`${process.env.REACT_APP_API_URL}/api/${userData.room_id}`)
-            setMessages(room.data.user_data.messages);
-        } catch (err) {
-            console.log(err)
-        }
+        const userData = getUserLocalStorage();
+        socket.emit('getAllMessages', userData)
     }
-
 
     const onSubmit = () => {
         if(text !== ""){
@@ -138,7 +136,6 @@ function ChatRoom({ socket }) {
         removeUserLocalStorage();
     }
 
-    console.log(socket_id, messages)
 
     return (
         <>

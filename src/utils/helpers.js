@@ -22,3 +22,10 @@ export const setUserLocalStorage = (data) => {
 export const removeUserLocalStorage = () => {
     localStorage.removeItem('chatapp');
 }
+
+export const updateSocketID = (socket_id) => {
+    const user = localStorage.getItem('chatapp');
+    const update = JSON.parse(user);
+    update['socket_id'] = socket_id;
+    localStorage.setItem('chatapp', JSON.stringify(update));
+}

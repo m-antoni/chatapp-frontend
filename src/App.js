@@ -3,22 +3,29 @@ import './App.css';
 import ChatRoom from "./components/ChatRoom";
 import Home from "./components/Home";
 import io from "socket.io-client";
-
-const socket = io(process.env.REACT_APP_API_URL);
+import { useEffect, useState } from "react";
+import { getUserLocalStorage } from "./utils/helpers"
 
 function App(){
+
+  const socketCon = io(process.env.REACT_APP_API_URL);
+  
+  useEffect(() => {
+    socketCon.connect();
+  },[])
+
     return (
         <Router>
           <Switch>
               <Route 
                 path="/"
-                render={() => <Home socket={socket}/>}
+                render={() => <Home socket={socketCon}/>}
                 exact 
               />
               <Route 
                 path="/:roomname/:username" 
-                socket={socket} 
-                render={() => <ChatRoom socket={socket}/>}
+                socket={socketCon} 
+                render={() => <ChatRoom socket={socketCon}/>}
                 exact
               />
           </Switch>
