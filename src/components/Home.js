@@ -70,12 +70,6 @@ function Home({ socket }) {
         e.preventDefault();
         setLoading(true);
 
-        if(roomname == '' && username == ''){
-            ToastDanger('Username and Roomname is required');
-            setLoading(false);
-            return false;
-        }
-
         try{
 
             const login = await axios.post(`${process.env.REACT_APP_API_URL}/api/login`, {
@@ -104,24 +98,20 @@ function Home({ socket }) {
                 <Card className={classes.card}>
                     <CardContent>
                         <FormGroup className={classes.formGroup}>
-                            <div>
-                                <FormControl className={classes.formControl}>
-                                    <TextField name="name"  value={username} onChange={e => setusername(e.target.value)} variant="standard" label="Your Name:" size="medium"></TextField>
-                                </FormControl>
-                            </div>
-                            <div>
-                                <FormControl className={classes.formControl}>
-                                    <InputLabel>Select Room</InputLabel>
-                                    <Select name="room" value={roomname} onChange={e => setroomname(e.target.value)}>
-                                        <MenuItem value="">None</MenuItem>
-                                        <MenuItem value="javaScript">JavaScript</MenuItem>
-                                        <MenuItem value="react">React</MenuItem>
-                                        <MenuItem value="typescript">TypeScript</MenuItem>
-                                        <MenuItem value="mongodb">MongoDB</MenuItem>
-                                        <MenuItem value="node-express">Nodejs</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </div>
+                            <FormControl className={classes.formControl}>
+                                <TextField name="name"  value={username} onChange={e => setusername(e.target.value)} variant="standard" label="Your Name:" size="medium"></TextField>
+                            </FormControl>
+                            <FormControl className={classes.formControl}>
+                                <InputLabel>Select Room</InputLabel>
+                                <Select name="room" value={roomname} onChange={e => setroomname(e.target.value)}>
+                                    <MenuItem value="">None</MenuItem>
+                                    <MenuItem value="javascript">javascript</MenuItem>
+                                    <MenuItem value="reactjs">reactjs</MenuItem>
+                                    <MenuItem value="typescript">typescript</MenuItem>
+                                    <MenuItem value="angularjs">angularjs</MenuItem>
+                                    <MenuItem value="nodejs">nodejs</MenuItem>
+                                </Select>
+                            </FormControl>
                             <Button onClick={joinRoom} variant="contained"  size="large" className={classes.button}>
                                 { loading ? <CircularProgress className={classes.loading} size={25}/> : 'JOIN ROOM' } 
                             </Button>
