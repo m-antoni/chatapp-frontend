@@ -8,11 +8,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel'
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
-import { Button, CardContent, CircularProgress, FormGroup } from '@material-ui/core';
+import { Button, CardContent, CircularProgress, FormGroup, Typography } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios'
 import { ToastDanger } from '../utils/izitoast.helper';
 import { setUserLocalStorage } from '../utils/helpers';
+import ChatIcon from '@material-ui/icons/Chat';
+
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -47,6 +49,11 @@ const useStyles = makeStyles((theme) => ({
     },
     loading: {
         color: '#ffff'
+    },
+    headerText: {
+        fontWeight: 'bold',
+        paddingTop: '10px',
+        color: '#9f78ff'
     }
 }));
 
@@ -98,6 +105,9 @@ function Home({ socket }) {
                 <Card className={classes.card}>
                     <CardContent>
                         <FormGroup className={classes.formGroup}>
+                            <Typography className={classes.headerText} variant="h5">
+                                ChatHive <ChatIcon/>
+                            </Typography>
                             <FormControl className={classes.formControl}>
                                 <TextField name="name"  value={username} onChange={e => setusername(e.target.value)} variant="standard" label="Your Name:" size="medium"></TextField>
                             </FormControl>

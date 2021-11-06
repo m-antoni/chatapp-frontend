@@ -8,9 +8,9 @@ import { CardContent, Typography, Box} from '@material-ui/core';
 import Message from './Message';
 import SendIcon from '@material-ui/icons/Send';
 import ChatIcon from '@material-ui/icons/Chat';
-import { Link, useParams, Redirect }from 'react-router-dom';
-import { getUserLocalStorage, removeUserLocalStorage, setUserLocalStorage, updateSocketID } from '../utils/helpers';
-import axios from 'axios';
+import { Link, useParams }from 'react-router-dom';
+import { getUserLocalStorage, removeUserLocalStorage } from '../utils/helpers';
+import { ToastDanger } from '../utils/izitoast.helper';
 
 const useStyles = makeStyles({
     root: {
@@ -57,7 +57,6 @@ const useStyles = makeStyles({
         top: '0px',
         marginLeft: '-5px',
         marginRight: '10px',
-        // marginBottom: '10px'
     },
     input: {
         color: 'black'
@@ -93,7 +92,20 @@ function ChatRoom({ socket }) {
     const [messages, setMessages] = useState([])
 
     useEffect(() => {
+        // check user credentials
+        const userData = getUserLocalStorage();
+        if(userData.username !== username || userData.roomname !== roomname){
+            window.location.href = '/';
+            ToastDanger(`Your not signed in to specific rooms`)
+        }
 
+        document.body.classList.remove('login-bg')
+        document.body.classList.add('default-bg')
+        getAllMessages()
+        //eslint-disable-next-line
+    },[]);
+
+    useEffect(() => {
         // receive from server but will filter by room id
         socket.on('message', async (payload) => {
             // await updateSocketID(payload.socket_id);
@@ -108,14 +120,6 @@ function ChatRoom({ socket }) {
         console.log(socket)
         //eslint-disable-next-line
     },[socket])
-
-    useEffect(() => {  
-        document.body.classList.remove('login-bg')
-        document.body.classList.add('default-bg')
-        getAllMessages()
-        //eslint-disable-next-line
-    },[]);
-
 
     const getAllMessages = async () => {
         const userData = getUserLocalStorage();

@@ -3,11 +3,10 @@ import './App.css';
 import ChatRoom from "./components/ChatRoom";
 import Home from "./components/Home";
 import io from "socket.io-client";
-import { useEffect, useState } from "react";
-import { getUserLocalStorage } from "./utils/helpers"
+import { useEffect } from "react";
 
 function App(){
-
+  
   const socketCon = io(process.env.REACT_APP_API_URL);
   
   useEffect(() => {
