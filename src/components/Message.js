@@ -3,6 +3,7 @@ import { makeStyles, ThemeProvider   } from '@material-ui/styles';
 import Avatar from '@material-ui/core/Avatar';
 import { deepOrange, deepPurple } from '@material-ui/core/colors';
 import moment from 'moment';
+import { capitalize } from '../utils/helpers';
 
 const useStyles = makeStyles((theme) => ({
     orange: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
         margin: '5px 0px'
     },
     text:{
-        margin: '0px 5px'
+        margin: '0px 5px',
     },
     messageLeft: {
         float: 'left',
@@ -46,6 +47,24 @@ const useStyles = makeStyles((theme) => ({
     },
     date:{
         color: 'grey',
+        margin: '3px',
+        fontSize: '0.7rem',
+        fontWeight: '600'
+    },
+    usernameRight: {
+        marginRight: '10px',
+        textAlign: 'right',
+        marginBottom: '-2px',
+        color: '#000',
+        margin: '3px',
+        fontSize: '0.7rem',
+        fontWeight: '600'
+    },
+    usernameLeft: {
+        marginLeft: '5px',
+        textAlign: 'left',
+        marginBottom: '-2px',
+        color: '##000',
         margin: '3px',
         fontSize: '0.7rem',
         fontWeight: '600'
@@ -75,6 +94,7 @@ function Message({ messages, username }){
                         return (
                            <div key={i}>
                                 <div className={classes.clearBoth}></div>
+                                <div className={classes.usernameRight}>{capitalize(m.username, true)}</div>
                                 <div className={classes.messageRight}>
                                     <div className={classes.text}>
                                         <div>{m.text}</div>
@@ -89,9 +109,10 @@ function Message({ messages, username }){
                         return (
                             <div key={i}>
                                 <div className={classes.clearBoth}></div>
+                                <div className={classes.usernameLeft}>{capitalize(m.username, true)}</div>
                                 <div className={classes.messageLeft}>
                                     <Avatar className={classes.purple}>{m.username.charAt(0).toUpperCase()}</Avatar>
-                                    <div className={classes.text}>
+                                    <div className={classes.textLeft}>
                                         <div>{m.text}</div>
                                         <div className={classes.date}>{moment(m.date).format('ll h:mm A')}</div>
                                     </div>

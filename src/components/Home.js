@@ -38,8 +38,9 @@ const useStyles = makeStyles((theme) => ({
     }, 
     card: {
         margin: 'auto',
-        marginTop: '70px',
-        maxWidth: 300
+        marginTop: '110px',
+        maxWidth: 300,
+        boxShadow: '0 8px 8px 0 rgba(0, 0, 0, 0.2), 0 10px 50px 0 rgba(0, 0, 0, 0.19)'
     },
     formGroup:{
        alignItems: 'center'
@@ -54,6 +55,10 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bold',
         paddingTop: '10px',
         color: '#9f78ff'
+    },
+    Icon: {
+        color: '#32cafe',
+        marginLeft: '3px'
     }
 }));
 
@@ -106,7 +111,7 @@ function Home({ socket }) {
                     <CardContent>
                         <FormGroup className={classes.formGroup}>
                             <Typography className={classes.headerText} variant="h5">
-                                ChatHive <ChatIcon/>
+                                ChatHive<ChatIcon className={classes.Icon}/>
                             </Typography>
                             <FormControl className={classes.formControl}>
                                 <TextField name="name"  value={username} onChange={e => setusername(e.target.value)} variant="standard" label="Your Name:" size="medium"></TextField>

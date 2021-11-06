@@ -1,5 +1,8 @@
+
+
 export const  capitalize = (string, a) => {
-    var tempstr = string.toLowerCase();
+    let stringValue = limitStr(string, 20);
+    let tempstr = stringValue.toLowerCase();
     if (a == false || a == undefined)
         return tempstr.replace(tempstr[0], tempstr[0].toUpperCase());
     else {
@@ -7,7 +10,9 @@ export const  capitalize = (string, a) => {
     }
 }
 
-
+export const limitStr = (text, count) => {
+    return text.slice(0, count) + (text.length > count ? "..." : "");
+}
 
 export const getUserLocalStorage = () => {
     const user = localStorage.getItem('chatapp');
@@ -29,3 +34,5 @@ export const updateSocketID = (socket_id) => {
     update['socket_id'] = socket_id;
     localStorage.setItem('chatapp', JSON.stringify(update));
 }
+
+

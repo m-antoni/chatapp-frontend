@@ -7,7 +7,9 @@ import { useEffect } from "react";
 
 function App(){
   
-  const socketCon = io(process.env.REACT_APP_API_URL);
+  const socketCon = io(`${process.env.REACT_APP_API_URL}`, { path: '/api/socket.io'});
+
+  console.log(socketCon);
   
   useEffect(() => {
     socketCon.connect();

@@ -13,9 +13,6 @@ import { getUserLocalStorage, removeUserLocalStorage } from '../utils/helpers';
 import { ToastDanger } from '../utils/izitoast.helper';
 
 const useStyles = makeStyles({
-    root: {
-        background: '#fdf0d5'
-    },
     card: { 
         bottom: '0',
         height: '73vh',
@@ -38,7 +35,7 @@ const useStyles = makeStyles({
         fontWeight: 'bold',
         zIndex: '99999',
         margin: '10px 0',
-        color: '#52b69a'
+        color: '#9f78ff'
     },
     chatIcon:{
         marginBottom: '-8px'
@@ -146,7 +143,7 @@ function ChatRoom({ socket }) {
             <Container maxWidth="sm">
                 <div className={classes.header}>
                     <Typography className={classes.roomName}><ChatIcon className={classes.chatIcon}/> {roomname.toUpperCase()}</Typography> 
-                    <Link to={'/'} onClick={leaveRoom} className={classes.link}><Button className={classes.leave} variant="contained" color="secondary" size="small"> Leave Room </Button> </Link>
+                    <Link to={'/'} onClick={leaveRoom} className={classes.link}><Button className={classes.leave} variant="contained" color="secondary" size="small"> Leave </Button> </Link>
                 </div>
                 <Card className={classes.card}>
                     <CardContent className={classes.cardContent}>
