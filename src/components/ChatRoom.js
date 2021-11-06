@@ -86,11 +86,13 @@ function ChatRoom({ socket }) {
 
     const classes = useStyles();
     const [text, setText] = useState('')
+    const [user_id, setUserID] = useState(null)
     const [messages, setMessages] = useState([])
 
     useEffect(() => {
         // check user credentials
         const userData = getUserLocalStorage();
+        setUserID(userData.user_id);
         if(userData.username !== username || userData.roomname !== roomname){
             window.location.href = '/';
             ToastDanger(`Your not signed in to specific rooms`)
@@ -114,7 +116,7 @@ function ChatRoom({ socket }) {
             }
         })
         
-        console.log(socket)
+        // console.log(socket)
         //eslint-disable-next-line
     },[socket])
 
@@ -147,7 +149,7 @@ function ChatRoom({ socket }) {
                 </div>
                 <Card className={classes.card}>
                     <CardContent className={classes.cardContent}>
-                        <Message messages={messages} username={username} socket={socket}/>
+                        <Message messages={messages} userID={user_id} socket={socket}/>
                     </CardContent>
                 </Card>
             </Container>

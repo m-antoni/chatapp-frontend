@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function Message({ messages, username }){
+function Message({ messages, userID }){
     
     const classes = useStyles();
 
@@ -90,11 +90,12 @@ function Message({ messages, username }){
             {
                 messages && messages.map((m,i) => {
                     // console.log(m)
-                    if(m.username === username){
+                    if(m.user_id === userID)
+                    {
                         return (
                            <div key={i}>
                                 <div className={classes.clearBoth}></div>
-                                <div className={classes.usernameRight}>{capitalize(m.username, true)}</div>
+                                {/* <div className={classes.usernameRight}>{capitalize(m.username, true)}</div> */}
                                 <div className={classes.messageRight}>
                                     <div className={classes.text}>
                                         <div>{m.text}</div>
@@ -105,21 +106,42 @@ function Message({ messages, username }){
                                 <div className={classes.clearBoth}></div>
                             </div>
                         )
-                    }else{
-                        return (
-                            <div key={i}>
-                                <div className={classes.clearBoth}></div>
-                                <div className={classes.usernameLeft}>{capitalize(m.username, true)}</div>
-                                <div className={classes.messageLeft}>
-                                    <Avatar className={classes.purple}>{m.username.charAt(0).toUpperCase()}</Avatar>
-                                    <div className={classes.textLeft}>
-                                        <div>{m.text}</div>
-                                        <div className={classes.date}>{moment(m.date).format('ll h:mm A')}</div>
+                    }
+                    else
+                    {
+                        if(!m.user_id)
+                        {
+                            return (
+                                <div key={i}>
+                                    <div className={classes.clearBoth}></div>
+                                    <div className={classes.usernameLeft}>{capitalize(m.username, true)}</div>
+                                    <div className={classes.messageLeft}>
+                                        <div className={classes.textLeft}>
+                                            <div>{m.text}</div>
+                                            <div className={classes.date}>{moment(m.date).format('ll h:mm A')}</div>
+                                        </div>
                                     </div>
+                                    <div className={classes.clearBoth}></div>
                                 </div>
-                                <div className={classes.clearBoth}></div>
-                            </div>
-                        )
+                            )
+                        }
+                        else
+                        {
+                            return (
+                                <div key={i}>
+                                    <div className={classes.clearBoth}></div>
+                                    <div className={classes.usernameLeft}>{capitalize(m.username, true)}</div>
+                                    <div className={classes.messageLeft}>
+                                        <Avatar className={classes.purple}>{m.username.charAt(0).toUpperCase()}</Avatar>
+                                        <div className={classes.textLeft}>
+                                            <div>{m.text}</div>
+                                            <div className={classes.date}>{moment(m.date).format('ll h:mm A')}</div>
+                                        </div>
+                                    </div>
+                                    <div className={classes.clearBoth}></div>
+                                </div>
+                            )
+                        }
                     }
                 })
             }

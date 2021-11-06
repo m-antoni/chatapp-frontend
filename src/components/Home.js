@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Home({ socket }) {
 
-    console.log(socket)
+    // console.log(socket)
 
     const classes = useStyles();
     const [username, setusername] = useState('');
