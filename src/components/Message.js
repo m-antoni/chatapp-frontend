@@ -69,20 +69,11 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '0.7rem',
         fontWeight: '600'
     },
-    usernameRight: {
-        marginRight: '10px',
-        textAlign: 'right',
-        marginBottom: '-2px',
-        color: '#000',
-        margin: '3px',
-        fontSize: '0.7rem',
-        fontWeight: '600'
-    },
     usernameLeft: {
         marginLeft: '5px',
         textAlign: 'left',
         marginBottom: '-3px',
-        color: '#000',
+        color: '#ffff',
         margin: '3px',
         fontSize: '0.7rem',
         fontWeight: '600'
@@ -112,7 +103,6 @@ function Message({ messages, userID, userTyping }){
                         return (
                            <div key={i}>
                                 <div className={classes.clearBoth}></div>
-                                {/* <div className={classes.usernameRight}>{capitalize(m.username, true)}</div> */}
                                 <div className={classes.messageRight}>
                                     <div className={classes.text}>
                                         <div>{m.text}</div>
