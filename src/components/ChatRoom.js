@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import { makeStyles, ThemeProvider   } from '@material-ui/styles';
 import Card from '@material-ui/core/Card';
-import { CardContent, Typography, Box} from '@material-ui/core';
+import { CardContent, Typography, CircularProgress, Box} from '@material-ui/core';
 import Message from './Message';
 import SendIcon from '@material-ui/icons/Send';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -77,6 +77,12 @@ const useStyles = makeStyles({
     },
     link: {
         textDecoration: 'none'
+    },
+    circularBox: {
+        marginTop: '100px'
+    },
+    circularProgress: {
+        color: '#ffff',
     }
 })
 
@@ -88,6 +94,8 @@ function ChatRoom({ socket }) {
     const [text, setText] = useState('')
     const [user_id, setUserID] = useState(null)
     const [messages, setMessages] = useState([])
+    const [userTyping, setUserTyping] = useState({ is_typing: false, text: '' });
+    const [spinner, setSpinner] = useState(false);
 
     useEffect(() => {
         // check user credentials
@@ -104,32 +112,51 @@ function ChatRoom({ socket }) {
         //eslint-disable-next-line
     },[]);
 
-    useEffect(() => {
+    useMemo(() => {
         // receive from server but will filter by room id
         socket.on('message', async (payload) => {
             // await updateSocketID(payload.socket_id);
             const userData = getUserLocalStorage();
             if(userData){
                 if(userData.room_id === payload.room_id){
+                    setUserTyping({ is_typing: false, text: ''});
                     setMessages(payload.messages);
+                    setSpinner(false);
                 }
             }
         })
-        
-        // console.log(socket)
+        socket.on('typing', payload => {
+            setUserTyping({ is_typing: payload.is_typing, text: payload.text })
+            // console.log(payload)
+        })
         //eslint-disable-next-line
     },[socket])
 
+
+    // trigger when user stops typing
+    useEffect(() => {
+        const timeoutID = setTimeout(() => {
+           socket.emit('typing', { is_typing: false, text: '' })
+        }, 1000)
+
+        return () => {
+            clearTimeout(timeoutID)
+        }
+    }, [text])
+
+
     const getAllMessages = async () => {
+        setSpinner(true);
         const userData = getUserLocalStorage();
         socket.emit('getAllMessages', userData)
     }
 
     const onSubmit = () => {
+        socket.emit('typing', { is_typing: false, text: '' })
         if(text !== ""){
             const data = getUserLocalStorage();
             socket.emit("chatMessage", { ...data, text: text });
-            setText('')
+            setText('');        
         }
     }
 
@@ -139,6 +166,21 @@ function ChatRoom({ socket }) {
         removeUserLocalStorage();
     }
 
+    const onChange = e => {
+        setText(e.target.value);
+        if(e.target.value.length === 0){
+            socket.emit('typing', { is_typing: false, text: '' })
+        }
+    }
+
+    const onKeyUpChange = e => {
+        if(e.target.value.length > 0){
+            socket.emit("typing", {    
+                is_typing: true,
+                text: `Someone is typing...`
+            });
+        }
+    }
 
     return (
         <>
@@ -149,7 +191,14 @@ function ChatRoom({ socket }) {
                 </div>
                 <Card className={classes.card}>
                     <CardContent className={classes.cardContent}>
-                        <Message messages={messages} userID={user_id} socket={socket}/>
+                        {
+                            spinner ? 
+                            <Box className={classes.circularBox} display="flex" justifyContent="center">
+                                <CircularProgress className={classes.circularProgress} size="4rem" thickness={3}/>
+                            </Box>
+                            :
+                            <Message messages={messages} userID={user_id} socket={socket} userTyping={userTyping}/>
+                        }
                     </CardContent>
                 </Card>
             </Container>
@@ -157,8 +206,9 @@ function ChatRoom({ socket }) {
                 <Box className={classes.box} display="flex" justifyContent="start" alignItems="center"> 
                     <TextField 
                         InputProps={{ className: classes.input}} 
-                        onChange={e => setText(e.target.value)} 
+                        onChange={onChange} 
                         onKeyPress={(e) => { if(e.key === 'Enter') return onSubmit() }}
+                        onKeyUp={onKeyUpChange}
                         name="text" 
                         value={text} 
                         variant="outlined" 

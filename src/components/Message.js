@@ -42,6 +42,24 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '20px 20px 20px 0px',
         margin: '5px 0px',
     },
+    messageTyping: {
+        float: 'left',
+        maxWidth: '75%',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        marginRight: 'auto',
+        fontSize: '0.9rem',
+        backgroundColor: '#ffff',
+        padding: '10px',
+        borderRadius: '20px 20px 20px 0px',
+        margin: '5px 0px',
+    },
+    messageTypingText:{
+        margin: '0px 5px',
+        fontSize: '17px',
+        fontWeight: '500'
+        
+    },
     clearBoth:{
         clear: 'both'
     },
@@ -63,8 +81,8 @@ const useStyles = makeStyles((theme) => ({
     usernameLeft: {
         marginLeft: '5px',
         textAlign: 'left',
-        marginBottom: '-2px',
-        color: '##000',
+        marginBottom: '-3px',
+        color: '#000',
         margin: '3px',
         fontSize: '0.7rem',
         fontWeight: '600'
@@ -72,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function Message({ messages, userID }){
+function Message({ messages, userID, userTyping }){
     
     const classes = useStyles();
 
@@ -82,8 +100,7 @@ function Message({ messages, userID }){
         messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     };
 
-    useEffect(scrollToBottom, [messages]);
-
+    useEffect(scrollToBottom, [messages, userTyping.is_typing]);
 
     return ( 
        <div>
@@ -116,7 +133,7 @@ function Message({ messages, userID }){
                                     <div className={classes.clearBoth}></div>
                                     <div className={classes.usernameLeft}>{capitalize(m.username, true)}</div>
                                     <div className={classes.messageLeft}>
-                                        <div className={classes.textLeft}>
+                                        <div className={classes.text}>
                                             <div>{m.text}</div>
                                             <div className={classes.date}>{moment(m.date).format('ll h:mm A')}</div>
                                         </div>
@@ -133,7 +150,7 @@ function Message({ messages, userID }){
                                     <div className={classes.usernameLeft}>{capitalize(m.username, true)}</div>
                                     <div className={classes.messageLeft}>
                                         <Avatar className={classes.purple}>{m.username.charAt(0).toUpperCase()}</Avatar>
-                                        <div className={classes.textLeft}>
+                                        <div className={classes.text}>
                                             <div>{m.text}</div>
                                             <div className={classes.date}>{moment(m.date).format('ll h:mm A')}</div>
                                         </div>
@@ -145,9 +162,21 @@ function Message({ messages, userID }){
                     }
                 })
             }
+            {
+                 userTyping.is_typing === true && 
+                 <>
+                     <div>
+                         <div className={classes.clearBoth}></div>
+                         <div className={classes.messageTyping}>
+                             <div className={classes.messageTypingText}>{userTyping.text}</div>
+                         </div>
+                         <div className={classes.clearBoth}></div>
+                     </div>
+                 </>
+            }
              <div ref={messagesEndRef} />
        </div>
     );
 }
 
-export default Message
+export default React.memo(Message)
